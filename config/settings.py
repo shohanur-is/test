@@ -24,11 +24,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ----------- SECURITY -----------
 
 # Secret key for cryptographic signing (use a .env variable for production)
-SECRET_KEY = os.getenv('SECRET_KEY', 'fallback-secret-key')  # Fallback secret key for safety
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'fallback-secret-key')  # Fallback secret key for safety
 DEBUG = False  # Default to False, can be overridden in development/production
-ALLOWED_HOSTS = []  # Empty in development, should be configured for production
-
 # run with set DJANGO_ENV=dev
+
+
+# from env
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost').split(',')
+INTERNAL_IPS = os.getenv('INTERNAL_IPS', '127.0.0.1').split(',')
+# ----------- CORS SETTINGS -----------
+CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:3000').split(',')
+
 
 # ----------- APPLICATION SETUP -----------
 
@@ -60,6 +66,7 @@ INSTALLED_APPS += [
 # Local apps
 INSTALLED_APPS += [
     'apps.auth_app',  # Custom authentication app
+    'apps.core',  # Core application
 ]
 
 # Custom user model
@@ -197,6 +204,7 @@ STATIC_URL = 'static/'  # URL for static files
 STATICFILES_DIRS = [BASE_DIR / 'static']  # Directories for static files
 MEDIA_URL = '/media/'  # URL for media files
 MEDIA_ROOT = BASE_DIR / 'media'  # Root directory for media files
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # Directory for collected static files
 
 # Ensure logs directory exists
 LOG_DIR = BASE_DIR / 'logs'

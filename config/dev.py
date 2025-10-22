@@ -17,16 +17,6 @@ INTERNAL_IPS = [
     "localhost",
 ]
 
-# Define allowed hosts for local development
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-
-# ----------- CORS SETTINGS -----------
-
-# Define allowed origins for CORS (Cross-Origin Resource Sharing)
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # React/Next.js development server
-    "http://127.0.0.1:3000",  # Localhost with alternative IP address
-]
 
 # ----------- DATABASE SETTINGS -----------
 

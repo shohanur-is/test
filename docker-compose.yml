@@ -1,0 +1,94 @@
+services:
+  # PostgreSQL database service
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # Redis cache service
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+  # Django web application
+  django-web:
+    build: .
+    container_name: django-docker
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+    environment:
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
+      DEBUG: ${DEBUG}
+      DJANGO_LOGLEVEL: ${DJANGO_LOGLEVEL}
+      DATABASE_ENGINE: ${DATABASE_ENGINE}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_USERNAME: ${DATABASE_USERNAME}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_HOST: db
+      DATABASE_PORT: 5432
+    env_file:
+      - .env
+    volumes:
+      - .:/app 
+    restart: unless-stopped
+
+  # # Celery worker for background tasks
+  # celery-worker:
+  #   build: .
+  #   container_name: celery-worker
+  #   depends_on:
+  #     - db
+  #     - redis
+  #   env_file:
+  #     - .env
+  #   volumes:
+  #     - .:/app
+  #     - celery_data:/app/celery-logs
+  #   command: celery -A common_auth worker --loglevel=info
+  #   restart: unless-stopped
+
+  # Celery beat scheduler (periodic tasks)
+  # celery-beat:
+  #   build: .
+  #   container_name: celery-beat
+  #   depends_on:
+  #     - db
+  #     - redis
+  #   env_file:
+  #     - .env
+  #   volumes:
+  #     - celery_beat_data:/app/celerybeat-schedule
+  #   command: celery -A common_auth beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+  #   restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+  # celery_beat_data:
+  # celery_data:

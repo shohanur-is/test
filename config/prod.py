@@ -10,15 +10,6 @@ import os
 # Disable debugging in production for security reasons
 DEBUG = False
 
-# Define allowed hosts (replace with your actual domain)
-ALLOWED_HOSTS = ['your-domain.com', 'www.your-domain.com']  # List of allowed hostnames
-
-# ----------- CORS SETTINGS -----------
-
-# Allow requests from your production frontend domain
-CORS_ALLOWED_ORIGINS = [
-    "https://www.yourfrontend.com",  # Frontend production domain
-]
 
 # ----------- DATABASE SETTINGS -----------
 
@@ -26,11 +17,11 @@ CORS_ALLOWED_ORIGINS = [
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',  # PostgreSQL database engine
-        'NAME': os.getenv('DB_NAME', 'mydatabase'),  # Database name (from environment variable)
-        'USER': os.getenv('DB_USER', 'myuser'),  # Database user (from environment variable)
-        'PASSWORD': os.getenv('DB_PASSWORD', 'mypassword'),  # Database password (from environment variable)
-        'HOST': os.getenv('DB_HOST', 'localhost'),  # Database host (from environment variable)
-        'PORT': os.getenv('DB_PORT', '5432'),  # Database port (default: 5432)
+        'NAME': os.getenv('DATABASE_NAME', 'mydatabase'),  # Database name (from environment variable)
+        'USER': os.getenv('DATABASE_USERNAME', 'myuser'),  # Database user (from environment variable)
+        'PASSWORD': os.getenv('DATABASE_PASSWORD', 'mypassword'),  # Database password (from environment variable)
+        'HOST': os.getenv('DATABASE_HOST', 'localhost'),  # Database host (from environment variable)
+        'PORT': os.getenv('DATABASE_PORT', '5432'),  # Database port (default: 5432)
     }
 }
 
