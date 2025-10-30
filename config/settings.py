@@ -13,10 +13,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 from pathlib import Path
 from datetime import timedelta
-from dotenv import load_dotenv
+from decouple import config
 
-# Load environment variables from a .env file
-load_dotenv()
 
 # Base directory path of the project
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,16 +22,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ----------- SECURITY -----------
 
 # Secret key for cryptographic signing (use a .env variable for production)
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'fallback-secret-key')  # Fallback secret key for safety
+SECRET_KEY = config('DJANGO_SECRET_KEY', 'fallback-secret-key')  # Fallback secret key for safety
 DEBUG = False  # Default to False, can be overridden in development/production
 # run with set DJANGO_ENV=dev
 
 
 # from env
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost').split(',')
-INTERNAL_IPS = os.getenv('INTERNAL_IPS', '127.0.0.1').split(',')
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', 'localhost').split(',')
+INTERNAL_IPS = config('INTERNAL_IPS', '127.0.0.1').split(',')
 # ----------- CORS SETTINGS -----------
-CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:3000').split(',')
+CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', 'http://localhost:3000').split(',')
 
 
 # ----------- APPLICATION SETUP -----------
@@ -70,10 +68,10 @@ INSTALLED_APPS += [
 ]
 
 # Custom user model
-AUTH_USER_MODEL = 'auth_app.CustomUser'
+AUTH_USER_MODEL = 'auth_app.User'
 
 # ROLE USAGE SETTING
-USE_ROLE = True  # Set to True to enable role field in user model
+USE_ROLE = True 
 
 # ----------- CORS SETTINGS -----------
 

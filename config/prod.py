@@ -14,16 +14,25 @@ DEBUG = False
 # ----------- DATABASE SETTINGS -----------
 
 # Use PostgreSQL for production database
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',  # PostgreSQL database engine
+#         'NAME': config('DATABASE_NAME', 'mydatabase'),  # Database name (from environment variable)
+#         'USER': config('DATABASE_USERNAME', 'myuser'),  # Database user (from environment variable)
+#         'PASSWORD': config('DATABASE_PASSWORD', 'mypassword'),  # Database password (from environment variable)
+#         'HOST': config('DATABASE_HOST', 'localhost'),  # Database host (from environment variable)
+#         'PORT': config('DATABASE_PORT', '5432'),  # Database port (default: 5432)
+#     }
+# }
+
+# Sqllte 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',  # PostgreSQL database engine
-        'NAME': os.getenv('DATABASE_NAME', 'mydatabase'),  # Database name (from environment variable)
-        'USER': os.getenv('DATABASE_USERNAME', 'myuser'),  # Database user (from environment variable)
-        'PASSWORD': os.getenv('DATABASE_PASSWORD', 'mypassword'),  # Database password (from environment variable)
-        'HOST': os.getenv('DATABASE_HOST', 'localhost'),  # Database host (from environment variable)
-        'PORT': os.getenv('DATABASE_PORT', '5432'),  # Database port (default: 5432)
+        'ENGINE': 'django.db.backends.sqlite3',  # SQLite backend
+        'NAME': BASE_DIR / 'db.sqlite3',  # Path to the SQLite database file
     }
 }
+
 
 # ----------- STATIC FILES -----------
 
@@ -69,10 +78,10 @@ LOGGING = {
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 # SMTP server settings (using environment variables for security)
-EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.gmail.com')  # Email server (Gmail example)
-EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))  # SMTP port (default: 587 for TLS)
-EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True').lower() in ('true', '1')  # Enable TLS if set
-EMAIL_USE_SSL = os.getenv('EMAIL_USE_SSL', 'False').lower() in ('true', '1')  # Enable SSL if set
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')  # Email account username
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')  # Email account password
-DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER)  # Default "From" email address
+EMAIL_HOST = config('EMAIL_HOST', 'smtp.gmail.com')  # Email server (Gmail example)
+EMAIL_PORT = int(config('EMAIL_PORT', 587))  # SMTP port (default: 587 for TLS)
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', 'True').lower() in ('true', '1')  # Enable TLS if set
+EMAIL_USE_SSL = config('EMAIL_USE_SSL', 'False').lower() in ('true', '1')  # Enable SSL if set
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')  # Email account username
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')  # Email account password
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER)  # Default "From" email address

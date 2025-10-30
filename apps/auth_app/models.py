@@ -1,12 +1,13 @@
 import uuid
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager 
 
+from apps.core.models import BaseModel
 from config.settings import USE_ROLE
 
 class UserRole(models.TextChoices):
     USER = "USER", "User"
-    ADMIN = "ADMIN", "Admin" #dont't change admin as it's used by django
+    ADMIN = "ADMIN", "Admin" 
     # Add more roles if needed
 
 class CustomUserManager(BaseUserManager):
@@ -31,8 +32,7 @@ class CustomUserManager(BaseUserManager):
         role = extra_fields.pop('role', UserRole.ADMIN)
         return self.create_user(email, password, role=role, **extra_fields)
 
-class CustomUser(AbstractBaseUser, PermissionsMixin):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+class User(AbstractBaseUser, PermissionsMixin, BaseModel):
     email = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=20, blank=True, null=True)
     name = models.CharField(max_length=100, blank=True) 

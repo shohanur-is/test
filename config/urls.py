@@ -41,8 +41,8 @@ urlpatterns += [
     path("", root, name="root")
 ]
 
-
-env = os.getenv('DJANGO_ENV', 'dev')
+from decouple import config
+env = config('DJANGO_ENV', 'dev')
 print(f"Running in {env} environment")
 # Add static/media URLs for local development only
 if env == 'dev' or settings.DEBUG:
